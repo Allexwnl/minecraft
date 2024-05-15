@@ -12,8 +12,11 @@ end
 function print_inventory_on_monitor(chest, monitor)
     chest = peripheral.find("minecraft:chest")  -- Find the chest peripheral
     for slot, item in pairs(chest.list()) do
+        term.setTextColor(colors.green)
+        local item_count = item.count
+        term.setTextColor(colors.white)
         local item_name = string.sub(item.name, 11)  -- Get the item name
-        writeLine(string.format("%dx %s", item.count, item_name))  -- Write the item count and name on the monitor
+        writeLine(string.format("%dx %s", item_count, item_name))  -- Write the item count and name on the monitor
     end
 end
 
