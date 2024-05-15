@@ -1,26 +1,28 @@
+-- Find the monitor peripheral
 local monitor = peripheral.find("monitor")
 
-
+-- Function to write a line of text on the monitor
 local function writeLine(text)
-    monitor.clear()
-    monitor.write(text)  -- Schrijf de tekst op de huidige regel
+    monitor.write(text)  -- Write the text on the current line
     _, y = monitor.getCursorPos()
-    monitor.setCursorPos(1,y + 1)  -- Verplaats de cursor naar de volgende regel
+    monitor.setCursorPos(1,y + 1)  -- Move the cursor to the next line
 end
 
+-- Function to print the inventory of a chest on the monitor
 function print_inventory_on_monitor(chest, monitor)
-    chest = peripheral.find("minecraft:chest")
+    chest = peripheral.find("minecraft:chest")  -- Find the chest peripheral
     for slot, item in pairs(chest.list()) do
-        local item_name = string.sub(item.name, 11)
-        writeLine(string.format("%dx %s", item.count, item_name))
+        local item_name = string.sub(item.name, 11)  -- Get the item name
+        writeLine(string.format("%dx %s", item.count, item_name))  -- Write the item count and name on the monitor
     end
 end
 
--- De while loop om elke 10 seconden de monitor te updaten
+-- While loop to update the monitor every 10 seconds
 while true do
-    local monitor = peripheral.find("monitor")
-    local chest = peripheral.find("minecraft:chest")
+    local chest = peripheral.find("chest")  -- Find the chest peripheral
+    monitor.clear()  -- Clear the monitor
+    monitor.setCursorPos(1, 1)  -- Move the cursor to the next line
 
-    print_inventory_on_monitor(chest, monitor)
+    print_inventory_on_monitor(chest, monitor)  -- Print the inventory on the monitor
     sleep(10)  -- Wait for 10 seconds before the next update
 end
