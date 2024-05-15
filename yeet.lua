@@ -1,36 +1,32 @@
--- Installeer deze code op een mining turtle in Minecraft
-
--- Variabelen instellen
-local stripWidth = 3 -- Breedte van elke strip
-local stripLength = 20 -- Lengte van de strip mijnoperatie
-
--- Functie om één strip te mijnen
-local function mineStrip()
-    for i = 1, stripWidth do
-        turtle.dig()
-        turtle.forward()
+-- Function to move forward with error handling
+local function moveForward()
+    while not turtle.forward() do
+        if turtle.detect() then
+            -- If there's an obstacle, try digging in front
+            if turtle.dig() then
+                -- If successful, try moving forward again
+                turtle.forward()
+            else
+                print("Unable to move forward. Stuck at obstacle.")
+                return false
+            end
+        elseif turtle.getFuelLevel() == 0 then
+            -- If fuel is depleted, print error message
+            print("Unable to move forward. Out of fuel.")
+            return false
+        end
     end
+    return true
 end
 
--- Functie om naar het begin van de volgende strip te bewegen
-local function moveToNextStrip()
-    turtle.turnRight()
-    turtle.dig()
-    turtle.forward()
-    turtle.turnRight()
-end
+-- Harvest a block in front
+turtle.dig()
 
--- Hoofdprogramma
-for strip = 1, stripLength do
-    mineStrip()
-    if strip < stripLength then
-        moveToNextStrip()
-    end
-end
+-- Move forward with error handling
+if moveForward() then
+    -- Dig down
+    turtle.digDown()
 
--- Terugkeren naar het startpunt
-turtle.turnLeft()
-for i = 1, stripLength do
-    turtle.forward()
+    -- Move down
+    turtle.down()
 end
-turtle.turnRight()
